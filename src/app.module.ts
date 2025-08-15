@@ -7,7 +7,7 @@ import { AppService } from './app.service';
 import { LeaveModule } from './leave/leave.module';
 import * as dotenv from "dotenv";
 dotenv.config()
-
+console.warn("Connecting to db")
 @Module({
   imports: [
     MongooseModule.forRoot(process.env.DB_URI as string,{

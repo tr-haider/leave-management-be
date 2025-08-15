@@ -16,7 +16,7 @@ const app_service_1 = require("./app.service");
 const leave_module_1 = require("./leave/leave.module");
 const dotenv = require("dotenv");
 dotenv.config();
-console.log('DB_URI:', process.env.DB_URI);
+console.warn("Connecting to db");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
