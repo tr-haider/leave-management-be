@@ -5,8 +5,13 @@ const app_module_1 = require("./app.module");
 const users_service_1 = require("./users/users.service");
 const swagger_1 = require("@nestjs/swagger");
 const common_1 = require("@nestjs/common");
+const platform_express_1 = require("@nestjs/platform-express");
+const express = require("express");
+const dotenv = require("dotenv");
+dotenv.config();
+const server = express();
 async function bootstrap() {
-    const app = await core_1.NestFactory.create(app_module_1.AppModule);
+    const app = await core_1.NestFactory.create(app_module_1.AppModule, new platform_express_1.ExpressAdapter(server));
     const usersService = app.get(users_service_1.UsersService);
     await usersService.createAdmin();
     app.enableCors();
@@ -18,10 +23,28 @@ async function bootstrap() {
         .setVersion('1.0')
         .build();
     const document = swagger_1.SwaggerModule.createDocument(app, swaggerConfig);
-    swagger_1.SwaggerModule.setup('swagger', app, document);
-    const port = process.env.PORT || 3000;
-    await app.listen(port);
-    console.warn(`App is running on http://localhost:${port}`);
+    swagger_1.SwaggerModule.setup('swagger', app, document, {
+        customSiteTitle: 'tr-leave-management-be',
+        customfavIcon: 'https://avatars.githubusercontent.com/u/6936373?s=200&v=4',
+        customJs: [
+            'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-bundle.min.js',
+            'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.min.js',
+        ],
+        customCssUrl: [
+            'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css',
+            'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.min.css',
+            'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.css',
+        ],
+    });
+    if (process.env.VERCEL) {
+        await app.init();
+    }
+    else {
+        const port = process.env.PORT || 3000;
+        await app.listen(port);
+        console.warn(`App is running on http://localhost:${port}`);
+    }
 }
 bootstrap();
+exports.default = server;
 //# sourceMappingURL=main.js.map
