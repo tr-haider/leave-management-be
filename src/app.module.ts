@@ -7,9 +7,12 @@ import { AppService } from './app.service';
 import { LeaveModule } from './leave/leave.module';
 import * as dotenv from "dotenv";
 dotenv.config()
+
 @Module({
   imports: [
-    MongooseModule.forRoot(process.env.DB_URI as string),
+    MongooseModule.forRoot(process.env.DB_URI as string,{
+      ssl: true,
+    }),
     AuthModule,
     UsersModule,
     LeaveModule,

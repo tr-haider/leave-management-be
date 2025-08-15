@@ -6,6 +6,8 @@ import { UsersService } from './users/users.service';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 
+
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const usersService = app.get(UsersService);
@@ -13,7 +15,6 @@ async function bootstrap() {
   app.enableCors();
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
-
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Leave Management System')
     .setDescription('API docs for Employee and Admin')
@@ -28,5 +29,7 @@ async function bootstrap() {
   await app.listen(port);
   console.log(`App is running on http://localhost:${port}`);
 }
+
+
 
 bootstrap();
