@@ -5,15 +5,11 @@ import { AppModule } from './app.module';
 import { UsersService } from './users/users.service';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
-import { ExpressAdapter } from '@nestjs/platform-express';
-import * as express from 'express';
-import * as dotenv from "dotenv";
-dotenv.config()
-
-const server = express();
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
+  const app = await NestFactory.create(AppModule);
   const usersService = app.get(UsersService);
   await usersService.createAdmin();
 
@@ -42,17 +38,7 @@ async function bootstrap() {
     ],
   });
 
-  if (process.env.VERCEL) {
-    // On Vercel → no listen, just init
-    await app.init();
-  } else {
-    // Local dev
-    const port = process.env.PORT || 3000;
-    await app.listen(port);
-    console.warn(`App is running on http://localhost:${port}`);
-  }
+  await app.listen(3000);
 }
 
 bootstrap();
-
-export default server; // Vercel handler

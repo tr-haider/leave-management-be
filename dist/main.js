@@ -5,13 +5,10 @@ const app_module_1 = require("./app.module");
 const users_service_1 = require("./users/users.service");
 const swagger_1 = require("@nestjs/swagger");
 const common_1 = require("@nestjs/common");
-const platform_express_1 = require("@nestjs/platform-express");
-const express = require("express");
 const dotenv = require("dotenv");
 dotenv.config();
-const server = express();
 async function bootstrap() {
-    const app = await core_1.NestFactory.create(app_module_1.AppModule, new platform_express_1.ExpressAdapter(server));
+    const app = await core_1.NestFactory.create(app_module_1.AppModule);
     const usersService = app.get(users_service_1.UsersService);
     await usersService.createAdmin();
     app.enableCors();
@@ -36,15 +33,7 @@ async function bootstrap() {
             'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.css',
         ],
     });
-    if (process.env.VERCEL) {
-        await app.init();
-    }
-    else {
-        const port = process.env.PORT || 3000;
-        await app.listen(port);
-        console.warn(`App is running on http://localhost:${port}`);
-    }
+    await app.listen(3000);
 }
 bootstrap();
-exports.default = server;
 //# sourceMappingURL=main.js.map
