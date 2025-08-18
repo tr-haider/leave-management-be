@@ -6,12 +6,10 @@ import { UsersService } from './users/users.service';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import * as dotenv from 'dotenv';
-import { ExpressAdapter } from '@nestjs/platform-express';
-import * as express from 'express';
 dotenv.config();
-const server = express();
+
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
+  const app = await NestFactory.create(AppModule);
   const usersService = app.get(UsersService);
   await usersService.createAdmin();
 
@@ -40,8 +38,7 @@ async function bootstrap() {
     ],
   });
 
-  await app.init(); // 👈 instead of listen()
+  await app.listen(3000);
 }
 
 bootstrap();
-export default server; 
